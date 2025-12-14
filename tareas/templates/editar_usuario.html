@@ -1,0 +1,82 @@
+{% extends "layout/base-navbar.html" %} {% block title %} Edita tu tareas-
+Tareas {% endblock %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+      <div class="card shadow rounded-4">
+        <div class="card-body p-4">
+          <h4 class="text-center mb-4 fw-bold">Editar perfil</h4>
+
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label">Nombre de usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                name="nombre_usuario"
+                value="{{ usuario.nombre_usuario }}"
+                required
+              />
+            </div>
+
+            {% if usuario.foto_perfil %}
+            <div class="text-center mb-3">
+              <img
+                src="{{ usuario.foto_perfil.url }}"
+                class="rounded-circle shadow"
+                width="120"
+                height="120"
+                style="object-fit: cover"
+              />
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+              <label class="form-label">Foto de perfil</label>
+              <input type="file" class="form-control" name="foto_perfil" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Residencia</label>
+              <input
+                type="text"
+                class="form-control"
+                name="residencia"
+                value="{{ usuario.residencia }}"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Correo electrónico</label>
+              <input
+                type="email"
+                class="form-control"
+                name="correo"
+                value="{{ usuario.correo }}"
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                value="{{ usuario.password }}"
+              />
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Guardar cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

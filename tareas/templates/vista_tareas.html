@@ -1,123 +1,135 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestor de Tareas</title>
+{% extends "layout/base-navbar.html" %} {% block title %} Sitio de tareas-
+Tareas jehan {% endblock %} {% block content %}
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+<style>
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  }
+  #hero {
+    background-image: url("https://th.bing.com/th/id/OIP.ob3lur7iA-xVeA1LTARLrwHaEo?o=7&cb=ucfimg2&rm=3&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3");
+    background-size: cover; /* ocupa todo el div */
+    background-position: center; /* centra la imagen */
+    background-repeat: no-repeat;
+    color: white;
+    width: 100%;
+    min-height: 250px;
+    padding: 80px 20px;
+  }
+</style>
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
+<div class="container py-5">
+  <div class="text-center mb-5" id="hero">
+    <h2 class="fw-bold">Tareas Pendientes</h2>
+    <p class="fw-light">Administra y visualiza tus tareas</p>
+  </div>
 
-    <style>
-      .card-hover {
-        transition: all 0.3s ease;
-      }
-      .card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
-      }
-    </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="#">
-          <i class="bi bi-check2-square me-2"></i>Gestor de Tareas
-        </a>
-        <a class="navbar-brand fw-bold" href="{% url 'crearTarea' %}">
-          agregar Tarea
-        </a>
-      </div>
-    </nav>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for t in tareas %}
+    <div class="col">
+      <div class="card h-100 border-0 rounded-4 card-hover">
+        <div
+          class="card-header bg-white border-0 d-flex align-items-center p-3"
+        >
+          {% if t.usuario.foto_perfil %}
 
-    <div class="container py-5">
-      <div class="text-center mb-5">
-        <h2 class="fw-bold">Tareas Pendientes</h2>
-        <p class="text-muted">
-          Administra y visualiza tus tareas de forma profesional
-        </p>
-      </div>
-
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for t in tareas %}
-        <div class="col">
-          <div class="card h-100 border-0 rounded-4 card-hover">
-            <div
-              class="card-header bg-white border-0 d-flex align-items-center p-3"
-            >
-              <img
-                src="{{ t.usuario.foto_perfil.url }}"
-                class="rounded-circle border border-2 border-primary me-3"
-                width="55"
-                height="55"
-                style="object-fit: cover"
-              />
-              <div>
-                <small class="text-muted">Asignada por</small>
-                <div class="fw-semibold">{{ t.usuario.nombre_usuario }}</div>
-              </div>
-            </div>
-
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title text-primary fw-bold">
-                <i class="bi bi-clipboard-check me-1"></i>{{ t.nombre_tarea }}
-              </h5>
-
-              <p class="card-text text-muted small flex-grow-1">
-                {{ t.descripcion|truncatechars:120 }}
-              </p>
-
-              {% if t.estado %}
-              <span class="badge bg-success align-self-start">
-                <i class="bi bi-check-circle me-1"></i>Finalizada
-              </span>
-              {% else %}
-              <span class="badge bg-warning text-dark align-self-start">
-                <i class="bi bi-clock me-1"></i>Pendiente
-              </span>
-              {% endif %}
-            </div>
-
-            <div
-              class="card-footer bg-white border-0 d-flex justify-content-between align-items-center"
-            >
-              <small class="text-muted">
-                <i class="bi bi-calendar-event me-1"></i>{{ t.fecha_creacion }}
-              </small>
-              <button class="btn btn-warning">Editar</button>
-            </div>
-          </div>
-        </div>
-        {% empty %}
-
-        <div class="col-12">
-          <div class="card border-0 rounded-4 shadow-sm">
-            <div class="card-body text-center p-5">
-              <i class="bi bi-emoji-smile display-4 text-primary"></i>
-              <h4 class="mt-3">¡Todo al día!</h4>
-              <p class="text-muted mb-0">
-                No tienes tareas pendientes en este momento.
-              </p>
-            </div>
+          <img
+            src="{{ t.usuario.foto_perfil.url }}"
+            class="rounded-circle border border-2 border-primary me-3"
+            width="55"
+            height="55"
+            style="object-fit: cover"
+          />
+          {% endif %}
+          <div>
+            <small class="text-muted">Asignada por</small>
+            <div class="fw-semibold">{{ t.usuario.nombre_usuario }}</div>
+            <button class="btn btn-warning">
+              <a
+                href="{% url 'editar_usuario' t.usuario.id %}"
+                class="link-underline link-underline-opacity-0"
+                >Editar</a
+              >
+            </button>
           </div>
         </div>
 
-        {% endfor %}
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-primary fw-bold">
+            <i class="bi bi-clipboard-check me-1"></i>{{ t.nombre_tarea }}
+          </h5>
+
+          <p class="card-text text-muted small flex-grow-1">
+            {{ t.descripcion|truncatechars:120 }}
+          </p>
+
+          {% if t.estado %}
+          <span class="badge bg-success align-self-start">
+            <i class="bi bi-check-circle me-1"></i>Finalizada
+          </span>
+          {% else %}
+          <span class="badge bg-warning text-dark align-self-start">
+            <i class="bi bi-clock me-1"></i>Pendiente
+          </span>
+          {% endif %}
+        </div>
+
+        <div
+          class="card-footer bg-white border-0 d-flex justify-content-between align-items-center"
+        >
+          <small class="text-muted">
+            <i class="bi bi-calendar-event me-1"></i>{{ t.fecha_creacion }}
+          </small>
+          <button class="btn btn-warning">
+            <a
+              href="{% url 'editar_tarea' t.id %}"
+              class="link-underline link-underline-opacity-0"
+              >Editar</a
+            >
+          </button>
+          <div
+            class="card-footer bg-white border-0 d-flex justify-content-between align-items-center"
+          >
+            <button class="btn btn-warning">
+              <a
+                href="{% url 'eliminar_tarea' t.id %}"
+                class="link-underline link-underline-opacity-0"
+                >Eliminar</a
+              >
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+
+    <div class="col-12">
+      <div class="card border-0 rounded-4 shadow-sm">
+        <div class="card-body text-center p-5">
+          <i class="bi bi-emoji-smile display-4 text-primary"></i>
+          <h4 class="mt-3">¡Todo al día!</h4>
+          <p class="text-muted mb-0">
+            No tienes tareas pendientes en este momento.
+          </p>
+        </div>
       </div>
     </div>
 
-    <footer class="bg-white border-top py-3 mt-5">
-      <div class="container text-center text-muted small">Gestor de Tareas</div>
-    </footer>
+    {% endfor %}
+  </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-</html>
-```
+<footer class="bg-white border-top py-3 mt-5">
+  <div class="container text-center text-muted small">
+    <p class="fw-bold">
+      <a href="https://github.com/Jea111" class="link-underline-opacity-0"
+        >Github Desarrollador:</a
+      >
+    </p>
+  </div>
+</footer>
+
+{% endblock %}

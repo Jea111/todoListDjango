@@ -1,0 +1,72 @@
+{% extends "layout/base-navbar.html" %} {% block title %} Edita tu tareas-
+Tareas {% endblock %} {% block content %}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+      <div class="card shadow-lg rounded-4">
+        <div class="card-body p-4">
+          <h4 class="text-center mb-4">Editar Tarea</h4>
+
+          <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Nombre de la tarea</label>
+              <input
+                type="text"
+                name="nombre_tarea"
+                class="form-control"
+                value="{{ tarea.nombre_tarea }}"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Descripción</label>
+              <textarea name="descripcion" class="form-control" rows="4">
+                {{ tarea.descripcion }}</textarea
+              >
+            </div>
+
+            <div class="form-check mb-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="estado"
+                id="estado"
+                {%
+                if
+                tarea.estado
+                %}checked{%
+                endif
+                %}
+              />
+              <label class="form-check-label" for="estado">
+                ¿Tarea completada?
+              </label>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Fecha límite</label>
+              <input
+                type="date"
+                name="fecha_finalizada"
+                class="form-control"
+                value="{{ tarea.fecha_finalizada|date:'Y-m-d' }}"
+              />
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Guardar cambios
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
