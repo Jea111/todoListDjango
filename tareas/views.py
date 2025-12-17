@@ -52,7 +52,8 @@ def editar_tarea(request, id):
 
 def eliminar_tarea(request,id):
     tarea = get_object_or_404(Tareas,id=id)
-    tarea.delete()
+    tarea.usuario.delete()
+    # tarea.delete()
     return redirect('tareas')
     
     
@@ -70,5 +71,19 @@ def editar_usuario(request,id):
         usuario.save()
         return redirect('tareas')
     return render(request,'editar_usuario.html',{'usuario':usuario})
-    
-    
+  
+  
+
+def buscador_tareas_por_nombre(request):
+    """Busqueda de tareas por nombre de usuario"""
+    if request.method == 'POST':
+        busqueda = request.POST.get('busqueda')
+        tareas_filtradas = Tareas.objects.filter(
+    usuario__nombre_usuario__icontains=busqueda
+)
+
+        return render(request,'busqueda_tareas_usuario.html',{'busqueda':busqueda,'tareas_filtradas':tareas_filtradas})
+    return redirect('tareas')
+
+
+   

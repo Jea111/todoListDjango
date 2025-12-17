@@ -1,0 +1,50 @@
+{% extends "layout/base-navbar.html" %} {% block title %} Tareas buscadas - {{
+busqueda }} {% endblock %} {% block content %}
+<div class="container mt-4">
+  <h3 class="mb-4">
+    Resultados para:
+    <span class="text-primary">"{{ busqueda }}"</span>
+  </h3>
+
+  <div class="row">
+    {% for tarea in tareas_filtradas %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body d-flex align-items-start">
+          {% if tarea.usuario.foto_perfil %}
+          <img
+            src="{{ tarea.usuario.foto_perfil.url }}"
+            class="rounded-circle border border-2 border-primary me-3"
+            width="55"
+            height="55"
+            style="object-fit: cover"
+            alt="Foto de {{ tarea.usuario.nombre_usuario }}"
+          />
+          {% endif %}
+
+          <div>
+            <h5 class="card-title mb-1">{{ tarea }}</h5>
+
+            <small class="text-muted">
+              Usuario: {{ tarea.usuario.nombre_usuario }}
+            </small>
+
+            <div class="mt-2">
+              {% if tarea.estado %}
+              <span class="badge bg-success"> Finalizada </span>
+              {% else %}
+              <span class="badge bg-warning text-dark"> Pendiente </span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info text-center">No se encontraron tareas</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
