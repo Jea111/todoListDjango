@@ -9,23 +9,20 @@ Tareas jehan {% endblock %} {% block content %}
     transform: translateY(-5px);
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
   }
-  #hero {
-    background-image: url("https://th.bing.com/th/id/OIP.ob3lur7iA-xVeA1LTARLrwHaEo?o=7&cb=ucfimg2&rm=3&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3");
-    background-size: cover; /* ocupa todo el div */
-    background-position: center; /* centra la imagen */
-    background-repeat: no-repeat;
-    color: white;
-    width: 100%;
-    min-height: 250px;
-    padding: 80px 20px;
-  }
+  
 </style>
 
-<div class="container py-5">
-  <div class="text-center mb-5" id="hero">
-    <h2 class="fw-bold">Tareas Pendientes</h2>
-    <p class="fw-light">Administra y visualiza tus tareas</p>
-  </div>
+
+  <form method="post" action="{% url 'tareas_filtradas' %}">
+    {% csrf_token %}
+    <input
+      type="text"
+      name="busqueda"
+      placeholder="Buscar tarea con tu nombre"
+      class="form-control w-25 mb-2"
+    />
+    <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+  </form>
 
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for t in tareas %}
