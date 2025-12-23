@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import createTarea,tareasAllViews,editar_tarea,eliminar_tarea,editar_usuario,buscador_tareas_por_nombre,validar_usuario
+from .views import tareasAllViews,editar_tarea,eliminar_tarea,editar_usuario,buscador_tareas_por_nombre,validar_usuario
+from usuarios.views import crear_usuario
 
 urlpatterns = [
-    path('crearTarea',createTarea,name='crearTarea'),
+    path('crearTarea',crear_usuario,name='crearTarea'),
     path('tareas',tareasAllViews,name='tareas'),
     path('editar_tarea/<int:id>/',editar_tarea,name='editar_tarea'),
     path('eliminar_tarea/<int:id>/',eliminar_tarea,name='eliminar_tarea'),
