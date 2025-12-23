@@ -86,4 +86,19 @@ def buscador_tareas_por_nombre(request):
     return redirect('tareas')
 
 
-   
+def validar_usuario(request):
+    "Login para admin"
+    if request.method == 'POST':
+        username = request.POST.get('b')
+        usuario = Usuarios.objects.filter(nombre_usuario__icontains=username).exists()
+        if usuario:
+            return redirect('tareas')
+            
+        else:
+            mensaje = 'Debes ser un usuario registrado para agg tareas'
+            return render(request,'validar_usuario.html',{'mensaje':mensaje})
+            
+            
+    return render(request,'validar_usuario.html')
+    
+        
