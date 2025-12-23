@@ -3,28 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from . models import Tareas
 from usuarios.models import Usuarios
-# Create your views here.
-def createTarea(request):
-    # crear usuario
-    if request.method =='POST':
-        nombre_usuario = request.POST.get('nombre_usuario')
-        foto_perfil = request.FILES.get('foto_perfil')
-        residencia = request.POST.get('residencia')
-        correo = request.POST.get('correo')
-        password = request.POST.get('password')
-        
-        usuario = Usuarios.objects.create(nombre_usuario=nombre_usuario,foto_perfil=foto_perfil,residencia=residencia,correo=correo,password=password)
-        
-        # crear tarea 
-        
-        nombre_tarea= request.POST.get('nombre_tarea')
-        descripcion= request.POST.get('descripcion')
-        fecha_finalizada= request.POST.get('fecha_finalizada')
-        
-        Tareas.objects.create(nombre_tarea=nombre_tarea,descripcion=descripcion,usuario=usuario,fecha_finalizada=fecha_finalizada)
-        return redirect('tareas')
-    return render(request,'crear_tareas.html')
-            
+# # Create your views here.
         
         
 def tareasAllViews(request):
@@ -51,11 +30,15 @@ def editar_tarea(request, id):
 
 
 def eliminar_tarea(request,id):
-    tarea = get_object_or_404(Tareas,id=id)
-    tarea.usuario.delete()
-    # tarea.delete()
+    tarea = get_object_or_404(Tareas, id=id)
+    usuario = tarea.usuario  
+
+    tarea.delete()
+
+    if not Tareas.objects.filter(usuario=usuario).exists():
+        usuario.delete()
+
     return redirect('tareas')
-    
     
 def editar_usuario(request,id):
     usuario = get_object_or_404(Usuarios,id=id)
@@ -90,7 +73,8 @@ def validar_usuario(request):
     "Login para admin"
     if request.method == 'POST':
         username = request.POST.get('b')
-        usuario = Usuarios.objects.filter(nombre_usuario__icontains=username).exists()
+        password = request.POST.get('p')
+        usuario = Usuarios.objects.filter(nombre_usuario=username,password=password).first()
         if usuario:
             return redirect('tareas')
             
